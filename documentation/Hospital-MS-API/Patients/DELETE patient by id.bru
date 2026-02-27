@@ -1,0 +1,19 @@
+meta {
+  name: DELETE invoice by id
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:4000/invoices/{{invoiceId}}
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

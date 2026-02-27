@@ -1,0 +1,397 @@
+openapi: 3.0.0
+info:
+  title: Hospital Management System API
+  version: 1.0.0
+  description: Documentation API (Patients, Doctors, Appointments, Invoices, History, Notifications)
+servers:
+  - url: http://localhost:4000
+
+tags:
+  - name: Patients
+  - name: Doctors
+  - name: Appointments
+  - name: Invoices
+  - name: PatientHistory
+  - name: Notifications
+
+components:
+  schemas:
+    Patient:
+      type: object
+      required: [firstName, lastName]
+      properties:
+        _id: { type: string, example: "65f2a19b4c1234567890abcd" }
+        firstName: { type: string, example: "Bruno" }
+        lastName: { type: string, example: "Kenfack" }
+        phone: { type: string, example: "699000111" }
+        address: { type: string, example: "Douala" }
+        age: { type: integer, nullable: true, example: 22 }
+        gender:
+          type: string
+          enum: [MALE, FEMALE, OTHER]
+          example: OTHER
+        createdAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+        updatedAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+
+    Doctor:
+      type: object
+      required: [name, specialisation]
+      properties:
+        _id: { type: string, example: "65f2a1c84c1234567890abce" }
+        name: { type: string, example: "Dr. Ndzi" }
+        specialisation: { type: string, example: "Cardiologie" }
+        telephone: { type: string, example: "699100001" }
+        disponibilite: { type: string, example: "Lun-Ven 08h-16h" }
+        createdAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+        updatedAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+
+    Invoice:
+      type: object
+      required: [patientId, patientName, amountOriginal, amountFCFA, totalFCFA, invoiceDate]
+      properties:
+        _id: { type: string, example: "65f2b1114c1234567890aaaa" }
+
+        patientId: { type: string, example: "65f2a19b4c1234567890abcd" }
+        patientName: { type: string, example: "Bruno Kenfack" }
+
+        services: { type: string, example: "Consultation + Radiographie" }
+
+        currency:
+          type: string
+          enum: [FCFA, EUR, USD]
+          example: FCFA
+
+        amountOriginal:
+          type: number
+          example: 15000
+
+        exchangeRate:
+          type: number
+          example: 1
+
+        amountFCFA:
+          type: number
+          example: 15000
+
+        vatRate:
+          type: number
+          example: 0.1925
+
+        vatAmountFCFA:
+          type: number
+          example: 2887.5
+
+        totalFCFA:
+          type: number
+          example: 17887.5
+
+        status:
+          type: string
+          enum: [PAID, UNPAID]
+          example: PAID
+
+        invoiceDate:
+          type: string
+          example: "2026-02-22"
+
+        paymentMethod:
+          type: string
+          enum: [CASH, MOMO, CARD]
+          example: MOMO
+
+        paymentRef:
+          type: string
+          example: "OM-123456"
+
+        paymentDate:
+          type: string
+          example: "2026-02-22"
+
+        createdAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+        updatedAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+
+    PatientHistory:
+      type: object
+      required: [patientId, eventDate]
+      properties:
+        _id: { type: string, example: "65f2c3334c1234567890cccc" }
+        patientId: { type: string, example: "65f2a19b4c1234567890abcd" }
+        type:
+          type: string
+          enum: [CONSULTATION, EXAM, TREATMENT, HOSPITALIZATION, NOTE, OTHER]
+          example: CONSULTATION
+        title: { type: string, example: "Consultation générale" }
+        description: { type: string, example: "Douleur abdominale" }
+        diagnosis: { type: string, example: "Gastrite" }
+        treatment: { type: string, example: "IPP 10 jours" }
+        eventDate:
+          type: string
+          format: date-time
+          example: "2026-02-22T09:30:00.000Z"
+        createdBy: { type: string, example: "Dr. Ndzi" }
+        createdAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+        updatedAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+
+    Notification:
+      type: object
+      required: [message]
+      properties:
+        _id: { type: string, example: "65f2d4444c1234567890dddd" }
+        type:
+          type: string
+          enum: [INFO, WARNING]
+          example: INFO
+        message: { type: string, example: "Rendez-vous confirmé" }
+        read: { type: boolean, example: false }
+        createdAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+        updatedAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+
+    # ⚠️ Appointment schema: je le laisse générique tant que tu ne m’envoies pas Appointment.js
+    Appointment:
+      type: object
+      required: [patientId, doctorId, date, time]
+      properties:
+        _id: { type: string, example: "65f2e5554c1234567890eeee" }
+        patientId: { type: string, example: "65f2a19b4c1234567890abcd" }
+        doctorId: { type: string, example: "65f2a1c84c1234567890abce" }
+        date: { type: string, example: "2026-02-22" }
+        time: { type: string, example: "10:30" }
+        status: { type: string, example: "PENDING" }
+        reason: { type: string, example: "Fièvre" }
+        createdAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+        updatedAt: { type: string, example: "2026-02-22T10:00:00.000Z" }
+
+paths:
+  /patients:
+    get:
+      tags: [Patients]
+      summary: Get all patients
+      responses:
+        "200":
+          description: List of patients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Patient"
+    post:
+      tags: [Patients]
+      summary: Create a patient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [firstName, lastName]
+              properties:
+                firstName: { type: string, example: "Bruno" }
+                lastName: { type: string, example: "Kenfack" }
+                phone: { type: string, example: "699000111" }
+                address: { type: string, example: "Douala" }
+                age: { type: integer, nullable: true, example: 22 }
+                gender: { type: string, enum: [MALE, FEMALE, OTHER], example: OTHER }
+      responses:
+        "201":
+          description: Patient created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Patient"
+        "400":
+          description: Missing/invalid fields
+
+  /patients/{id}:
+    delete:
+      tags: [Patients]
+      summary: Delete a patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Patient deleted
+        "404":
+          description: Patient not found
+
+  /patients/{id}/history:
+    get:
+      tags: [History]
+      summary: Get patient history (patient + appointments + invoices)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: History returned
+
+  /doctors:
+    get:
+      tags: [Doctors]
+      summary: Get all doctors
+      responses:
+        "200":
+          description: List of doctors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Doctor"
+    post:
+      tags: [Doctors]
+      summary: Create a doctor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, specialisation]
+              properties:
+                name: { type: string, example: "Dr. Ndzi" }
+                specialisation: { type: string, example: "Cardiologie" }
+                telephone: { type: string, example: "699100001" }
+                disponibilite: { type: string, example: "Lun-Ven 08h-16h" }
+      responses:
+        "201":
+          description: Doctor created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Doctor"
+        "400":
+          description: Missing/invalid fields
+
+  /doctors/{id}:
+    delete:
+      tags: [Doctors]
+      summary: Delete a doctor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Doctor deleted
+        "404":
+          description: Doctor not found
+
+  /appointments:
+    get:
+      tags: [Appointments]
+      summary: Get all appointments
+      responses:
+        "200":
+          description: List of appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Appointment"
+    post:
+      tags: [Appointments]
+      summary: Create an appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Appointment"
+      responses:
+        "201":
+          description: Appointment created
+        "400":
+          description: Missing/invalid fields
+
+  /appointments/{id}:
+    delete:
+      tags: [Appointments]
+      summary: Delete an appointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Appointment deleted
+        "404":
+          description: Appointment not found
+
+  /invoices:
+    get:
+      tags: [Invoices]
+      summary: Get all invoices
+      responses:
+        "200":
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+    post:
+      tags: [Invoices]
+      summary: Create an invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [patientId, amountOriginal, invoiceDate]
+              properties:
+                patientId: { type: string, example: "65f2a19b4c1234567890abcd" }
+                services: { type: string, example: "Consultation + Radio" }
+                currency: { type: string, enum: [FCFA, EUR, USD], example: FCFA }
+                amountOriginal: { type: number, example: 15000 }
+                exchangeRate: { type: number, example: 1 }
+                vatRate: { type: number, example: 0.1925 }
+                status: { type: string, enum: [PAID, UNPAID], example: PAID }
+                invoiceDate: { type: string, example: "2026-02-22" }
+                paymentMethod: { type: string, enum: [CASH, MOMO, CARD], example: MOMO }
+                paymentRef: { type: string, example: "OM-123456" }
+                paymentDate: { type: string, example: "2026-02-22" }
+      responses:
+        "201":
+          description: Invoice created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "400":
+          description: Missing/invalid fields
+        "404":
+          description: Patient not found
+
+  /invoices/{id}:
+    delete:
+      tags: [Invoices]
+      summary: Delete an invoice
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Invoice deleted
+        "404":
+          description: Invoice not found
+
+  /invoices/stats:
+    get:
+      tags: [Invoices]
+      summary: Billing stats (paid vs unpaid)
+      responses:
+        "200":
+          description: Stats (paidFCFA / unpaidFCFA)

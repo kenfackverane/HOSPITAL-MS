@@ -1,0 +1,26 @@
+meta {
+  name: PUT update patient
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:4000/patients/69a198b0f121f118682f24cc
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "firstName": "BINOU",
+    "lastName": "DOUANLA",
+    "phone": "676118276",
+    "address": "Mbouda",
+    "age": 25,
+    "gender": "MALE"
+  }
+}

@@ -1,0 +1,213 @@
+Offline Hospital Management System (OHMS)
+
+A full-stack offline hospital management application designed to manage patients, doctors, appointments, billing, and patient history without requiring an internet connection.
+
+This system demonstrates how digital tools can improve hospital administration efficiency in environments with limited connectivity.
+
+🎯 Project Purpose
+
+Small clinics often rely on paper records, which can lead to:
+
+data loss
+
+slow access to information
+
+human errors
+
+inefficient workflows
+
+OHMS provides a simple digital solution to manage hospital operations locally.
+
+🧱 Technologies Used
+Frontend
+
+React (Vite)
+
+CSS (custom styling)
+
+Axios
+
+Backend
+
+Node.js
+
+Express.js
+
+MongoDB (local database)
+
+Mongoose
+
+⚙️ Key Features
+👥 Patient Management
+
+✔ Add patients
+✔ Edit patients
+✔ Delete patients
+✔ View patient list
+
+👨‍⚕️ Doctor Management
+
+✔ Add doctors
+✔ Edit doctors
+✔ Delete doctors
+✔ View availability
+
+📅 Appointment Scheduling
+
+✔ Create appointments
+✔ Assign doctor & patient
+✔ Track date & time
+✔ Manage appointment status
+
+💳 Billing System
+
+✔ Generate invoices
+✔ VAT support
+✔ Multiple payment modes
+✔ Track paid / unpaid
+✔ Invoice stored in patient history
+
+🧾 Patient History
+
+✔ View patient details
+✔ View appointments history
+✔ View invoices history
+
+
+📊 Dynamic Dashboard
+
+✔ Real-time statistics
+✔ Auto refresh data
+✔ Live appointment overview
+
+🧾 Export Invoice PDF
+
+✔ Printable invoice format
+
+💊 Pharmacy Module
+
+✔ Add medicines
+✔ Track stock
+✔ Manage expiry
+
+🔔 Notifications
+
+✔ New invoice alerts
+✔ System updates
+
+📴 Offline Capability
+
+The system runs entirely on:
+
+✔ localhost
+✔ MongoDB local database
+✔ without internet connection
+
+📂 Project Structure
+hospital-ms/
+│
+├── backend/
+│   ├── models/
+│   ├── controllers/
+│   ├── routes/
+│   └── server.js
+│
+├── frontend/
+│   ├── components/
+│   ├── pages/
+│   ├── api/
+│   └── App.jsx
+🚀 Installation Guide
+1️⃣ Clone Project
+git clone <repository-url>
+2️⃣ Backend Setup
+cd backend
+npm install
+node server.js
+
+Server runs at:
+
+👉 http://localhost:4000
+
+3️⃣ Frontend Setup
+cd frontend
+npm install
+npm run dev
+
+Frontend runs at:
+
+👉 http://localhost:5173
+
+4️⃣ MongoDB
+
+Make sure MongoDB is running locally.
+
+📊 Dashboard Auto Simulation
+
+The dashboard updates automatically when:
+
+✔ new patient added
+✔ appointment created
+✔ invoice generated
+
+📡 API Overview
+
+Base URL:
+
+http://localhost:4000
+
+
+
+import { NavLink } from "react-router-dom";
+
+// Sidebar personnalisée VeraHospital
+export default function Sidebar() {
+  return (
+    <aside className="sidebar">
+      <div className="brand">
+        <div className="brand-badge">∞</div>
+
+        <div>
+          <strong>VeraHospital</strong>
+          <div style={{ fontSize: 12, opacity: 0.8 }}>
+            Votre santé, notre priorité
+          </div>
+        </div>
+      </div>
+
+      <nav className="nav">
+        <NavLink to="/" end className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          ⬛ Tableau de bord
+        </NavLink>
+
+        <NavLink to="/patients" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          👤 Patients
+        </NavLink>
+
+        <NavLink to="/doctors" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          🧑‍⚕️ Médecins
+        </NavLink>
+
+        <NavLink to="/appointments" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          📅 Rendez-vous
+        </NavLink>
+
+        <NavLink to="/billing" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          💳 Facturation
+        </NavLink>
+
+        <NavLink to="/history" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          🕘 Historique Patient
+        </NavLink>
+      </nav>
+
+      <div className="sidebar-sep"></div>
+
+      <nav className="nav">
+        <NavLink to="/settings" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          ⚙️ Settings
+        </NavLink>
+      </nav>
+    </aside>
+  );
+}

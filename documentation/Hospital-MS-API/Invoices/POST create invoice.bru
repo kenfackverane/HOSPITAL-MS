@@ -1,0 +1,35 @@
+meta {
+  name: POST create invoice
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:4000/invoices
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "patientId": "69a198b0f121f118682f24cc",
+    "services": "Consultation + Radiographie",
+    "currency": "FCFA",
+    "amountOriginal": 15000,
+    "vatRate": 0.1925,
+    "status": "PAID",
+    "invoiceDate": "2026-02-22",
+    "paymentMethod": "MOMO",
+    "paymentRef": "OM-123456",
+    "paymentDate": "2026-02-22"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

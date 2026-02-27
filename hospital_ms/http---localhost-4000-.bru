@@ -1,0 +1,30 @@
+meta {
+  name: http://localhost:4000/
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:4000/invoices
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "patientId": "69a026cd37131462e79e7b1c",
+    "services": "Consultation + Médicaments",
+    "amount": 12000,
+    "status": "PAID",
+    "invoiceDate": "2026-02-26"
+  }
+  
+  
+  
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

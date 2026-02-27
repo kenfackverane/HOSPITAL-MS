@@ -1,0 +1,31 @@
+meta {
+  name: POST create appointment
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:4000/appointments
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "patientId": "69a198b0f121f118682f24cc",
+    "doctorId": "69a19cadda56d45294ee53cd",
+    "date": "2026-02-22",
+    "time": "10:30",
+    "status": "PENDING",
+    "reason": "Consultation"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

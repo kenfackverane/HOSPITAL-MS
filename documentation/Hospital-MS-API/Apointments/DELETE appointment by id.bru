@@ -1,0 +1,16 @@
+meta {
+  name: DELETE appointment by id
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://localhost:4000/appointments/appointmentId
+  body: none
+  auth: none
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

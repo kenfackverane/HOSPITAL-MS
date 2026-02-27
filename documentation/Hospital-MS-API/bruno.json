@@ -1,0 +1,12 @@
+{
+  "version": "1",
+  "name": "Hospital-MS-API",
+  "type": "collection",
+  "env": {
+    "baseUrl": "http://localhost:4000",
+    "patientId": "",
+    "doctorId": "",
+    "appointmentId": "",
+    "invoiceId": ""
+  }
+}

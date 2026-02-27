@@ -1,0 +1,16 @@
+meta {
+  name: DELETE doctor by id
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://localhost:4000/doctors/doctorId
+  body: none
+  auth: none
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
