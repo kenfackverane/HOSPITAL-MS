@@ -25,7 +25,7 @@ npm install express cors mongoose dotenv
 Create a .env file inside backend/:
 
 PORT=4000
-MONGO_URI=mongodb://127.0.0.1:27017/hospital_ms
+MONGO_URI="mongodb+srv://hospitaluser:hospital123@cluster0.w3nazcw.mongodb.net/hospitalms?retryWrites=true&w=majority"
 4) Run
 cd backend
 node server.js

@@ -6,7 +6,7 @@ export default function PatientHistory({ patientId }) {
   useEffect(() => {
     if (!patientId) return;
 
-    fetch(`http://localhost:4000/patients/${patientId}/history`)
+    fetch(`https://hospital-ms-huhk.vercel.app/patients/${patientId}/history`)
       .then(res => res.json())
       .then(data => setHistory(data.history || []))
       .catch(err => console.error(err));
