@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
+
+require("dotenv").config({ path: __dirname + "/.env" });
+console.log("MONGO_URI loaded?", !!process.env.MONGO_URI);
 
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
