@@ -20,8 +20,20 @@ const app = express();
 // ✅ Load Swagger file
 const swaggerDocument = YAML.load("./swagger.yaml");
 
+// ✅ CORS (autorise Netlify + dev local)
+app.use(
+  cors({
+    origin: [
+      "https://verahospital.netlify.app",
+      "http://localhost:5173",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+
 // Middlewares
-app.use(cors());
 app.use(express.json());
 
 // Swagger UI
@@ -40,7 +52,5 @@ app.use("/invoices", InvoiceRoutes);
 const PORT = process.env.PORT || 4000;
 
 connectDB().then(() => {
-  app.listen(PORT, () =>
-    console.log(`✅ Server running on http://localhost:${PORT}`)
-  );
+  app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 });
