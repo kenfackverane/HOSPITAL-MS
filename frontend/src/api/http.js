@@ -1,8 +1,9 @@
 import axios from "axios";
 
-// ✅ Backend URL (local en dev, Vercel en prod via Netlify env var)
+const root = (import.meta.env.VITE_API_URL || "http://localhost:4000").replace(/\/$/, "");
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
+  baseURL: `${root}/api`,
 });
 
 api.interceptors.request.use((config) => {
