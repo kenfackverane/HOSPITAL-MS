@@ -2,15 +2,22 @@
 const express = require("express");
 const cors = require("cors");
 
-// (Optionnel) charge .env en local seulement
-// require("dotenv").config();
-
 const app = express();
 
 /* =========================
-   Middlewares
+   CORS - Allow your deployed domains
 ========================= */
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://hospital-ms-huhk.vercel.app",  // Your frontend
+    "https://verahospital.netlify.app",       // Original allowed
+    "http://localhost:5173",                   // Dev local
+    "http://localhost:3000"                     // Dev local
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+}));
+
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -26,35 +33,61 @@ app.get("/api/health", (req, res) => {
 });
 
 /* =========================
+   Database connection for Vercel
+========================= */
+let isDbConnected = false;
+const connectDB = require("./src/config/db");
+
+const ensureDbConnection = async () => {
+  if (!isDbConnected) {
+    try {
+      await connectDB();
+      isDbConnected = true;
+    } catch (err) {
+      console.error("DB connection failed:", err);
+      throw err;
+    }
+  }
+};
+
+app.use(async (req, res, next) => {
+  try {
+    await ensureDbConnection();
+    next();
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: "Database connection failed" });
+  }
+});
+
+/* =========================
    Routes imports
-   ✅ Adapte seulement le chemin si besoin
 ========================= */
 let PatientRoutes, DoctorRoutes, AppointmentRoutes, InvoiceRoutes, HistoryRoutes;
 
 try {
   PatientRoutes = require("./src/routes/PatientRoutes.js");
 } catch (e) {
-  console.warn("⚠️ PatientRoutes introuvable:", e.message);
+  console.warn("PatientRoutes not found:", e.message);
 }
 try {
   DoctorRoutes = require("./src/routes/DoctorRoutes.js");
 } catch (e) {
-  console.warn("⚠️ DoctorRoutes introuvable:", e.message);
+  console.warn("DoctorRoutes not found:", e.message);
 }
 try {
   AppointmentRoutes = require("./src/routes/AppointmentRoutes.js");
 } catch (e) {
-  console.warn("⚠️ AppointmentRoutes introuvable:", e.message);
+  console.warn("AppointmentRoutes not found:", e.message);
 }
 try {
   InvoiceRoutes = require("./src/routes/InvoiceRoutes.js");
 } catch (e) {
-  console.warn("⚠️ InvoiceRoutes introuvable:", e.message);
+  console.warn("InvoiceRoutes not found:", e.message);
 }
 try {
   HistoryRoutes = require("./src/routes/HistoryRoutes.js");
 } catch (e) {
-  console.warn("⚠️ HistoryRoutes introuvable:", e.message);
+  console.warn("HistoryRoutes not found:", e.message);
 }
 
 /* =========================
@@ -81,7 +114,7 @@ app.use((req, res) => {
    Global error handler
 ========================= */
 app.use((err, req, res, next) => {
-  console.error("❌ Server error:", err);
+  console.error("Server error:", err);
   return res.status(500).json({
     ok: false,
     error: "Internal Server Error",
